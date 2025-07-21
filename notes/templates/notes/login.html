@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if note %}Edit{% else %}Create{% endif %} Note</title>
+    <style>
+        @keyframes fadeInBody {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eee6f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            animation: fadeInBody 0.6s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            background-color: #f9f3fc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #d0b8e0;
+            animation: slideUp 0.6s ease;
+        }
+
+        h2 {
+            color: #6a0dad;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: popIn 0.5s ease;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: slideUp 0.4s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            box-shadow: 0 0 5px #b083d9;
+            transform: scale(1.01);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #b083d9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: popIn 0.5s ease;
+        }
+
+        button:hover {
+            background-color: #a06cc7;
+            transform: scale(1.05);
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #6a0dad;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            animation: fadeInBody 0.8s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #4e008e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>{% if note %}Edit{% else %}Create{% endif %} Note</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% if form %}
+            {{ form.as_p }}
+        {% else %}
+            <label>Title:</label><br>
+            <input type="text" name="title" value="{{ note.title|default_if_none:'' }}"><br>
+
+            <label>Content:</label><br>
+            <textarea name="content" rows="6">{{ note.content|default_if_none:'' }}</textarea><br>
+
+            <label><input type="checkbox" name="is_important" {% if note.is_important %}checked{% endif %}> Important</label><br><br>
+        {% endif %}
+        <button type="submit">{% if form %}Sign Up{% else %}Save{% endif %}</button>
+    </form>
+    {% if form %}
+        <p style="text-align: center;">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    {% else %}
+        <a href="{% url 'note_list' %}">← Back to Notes</a>
+    {% endif %}
+</div>
+</body>
+</html>

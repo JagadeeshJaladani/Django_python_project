@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Notes</title>
+    <style>
+        @keyframes fadeInBody {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInNote {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eee6f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            animation: fadeInBody 0.6s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            background-color: #f9f3fc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #d0b8e0;
+            animation: slideUp 0.6s ease;
+        }
+
+        h2 {
+            color: #6a0dad;
+            text-align: center;
+            animation: popIn 0.5s ease;
+        }
+
+        .new-note {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 20px auto;
+            background-color: #b083d9;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .new-note:hover {
+            background-color: #a06cc7;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 6px solid #b083d9;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: fadeInNote 0.4s ease;
+        }
+
+        strong {
+            font-size: 18px;
+        }
+
+        .note-date {
+            color: #777;
+            font-size: 13px;
+        }
+
+        a {
+            color: #6a0dad;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #4e008e;
+        }
+
+        .empty {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            animation: fadeInNote 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Your Notes</h2>
+    <a class="new-note" href="{% url 'note_create' %}">+ New Note</a>
+    <ul>
+        {% for note in notes %}
+            <li>
+                <strong>{{ note.title }}</strong>
+                {% if note.is_important %} ⭐{% endif %}
+                <div class="note-date">{{ note.created_at|date:"SHORT_DATETIME_FORMAT" }}</div>
+                <p>{{ note.content|linebreaks }}</p>
+                <a href="{% url 'note_update' note.pk %}">Edit</a>
+                <a href="{% url 'note_delete' note.pk %}">Delete</a>
+            </li>
+        {% empty %}
+            <li class="empty">No notes yet!</li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
