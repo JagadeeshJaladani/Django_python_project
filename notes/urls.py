@@ -12,3 +12,10 @@ urlpatterns = [
     path('notes/<int:pk>/edit/', views.note_update, name='note_update'),
     path('notes/<int:pk>/delete/', views.note_delete, name='note_delete'),
 ]
+from django.urls import path
+from .views import api_frontend
+
+urlpatterns = [
+    path('', api_frontend, name='api-frontend'),
+    # your other HTML routes like login, register, etc.
+]

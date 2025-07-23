@@ -135,6 +135,8 @@
         </form>
         {% if form %}
             <p style="text-align: center;">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            <p><a href="{% url 'api-frontend' %}">Go to API Frontend</a></p>
+
         {% else %}
             <a href="{% url 'note_list' %}">← Back to Notes</a>
         {% endif %}

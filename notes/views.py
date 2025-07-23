@@ -54,3 +54,21 @@ def note_delete(request, pk):
         note.delete()
         return redirect('note_list')
     return render(request, 'notes/note_confirm_delete.html', {'note': note})
+
+
+from rest_framework import generics
+from .models import Note
+from .serializers import NoteSerializer
+
+class NoteListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+
+class NoteRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+
+from django.shortcuts import render
+
+def api_frontend(request):
+    return render(request, 'notes/api_home.html')
